@@ -1,0 +1,41 @@
+[
+  {
+    "id": "3e814834-fb5b-479e-921c-a6332a38d6a6",
+    "firstName": "Admin",
+    "lastName": "CCC",
+    "email": "admin@ccc.edu.ph",
+    "passwordHash": "$2b$10$OLoeHRW18V7TBiy3Q8J.QO2glT108AnjYxQTeBO4nBOYttAQzntte",
+    "course": "",
+    "role": "admin",
+    "rfidUid": null,
+    "status": "active",
+    "mustChangePassword": false,
+    "createdAt": "2026-10-08T19:56:27.086Z"
+  },
+  {
+    "id": "70725eb2-5b0e-497a-944a-ff3dda3bca3a",
+    "firstName": "Janelle",
+    "lastName": "Delima",
+    "email": "janelledlm25@gmail.com",
+    "passwordHash": "$2b$10$mVzrXLB20KxcO9X0UAUDB.owpaSnxB9F36R0d7SKEayYtLhg2kfOS",
+    "course": "",
+    "role": "student",
+    "rfidUid": null,
+    "status": "inactive",
+    "mustChangePassword": false,
+    "createdAt": "2026-10-08T19:59:55.182Z"
+  },
+  {
+    "id": "63a301aa-2325-4dc0-8183-d9fd7d4d3999",
+    "firstName": "Icessen",
+    "lastName": "Sacdalan",
+    "email": "sacdalanicessen@gmail.com",
+    "passwordHash": "$2b$10$uiv8zqvowBZQAL8yowuWYeSR.JGzgW3vgh1Vbpg8Owjq9d/x6VQtG",
+    "course": "BSCS",
+    "role": "student",
+    "rfidUid": "2024-8503",
+    "status": "active",
+    "mustChangePassword": false,
+    "createdAt": "2026-10-12T07:15:18.359Z"
+  }
+]

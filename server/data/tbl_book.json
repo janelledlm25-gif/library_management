@@ -1,0 +1,68 @@
+[
+  {
+    "id": "be0f4515-60a3-4577-a372-9f6584f5b39f",
+    "title": "Introduction to Computing",
+    "author": "David Evans",
+    "isbn": "978-1-23456-001-1",
+    "category": "Computer Science",
+    "status": "available",
+    "createdAt": "2026-10-08T17:42:11.127Z",
+    "accessionNo": "ACC-0001",
+    "copies": 1
+  },
+  {
+    "id": "f418d6ab-0f27-4369-8e36-9604b90f1e38",
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "isbn": "978-0-13235-088-4",
+    "category": "Computer Science",
+    "status": "available",
+    "createdAt": "2026-10-08T17:42:11.127Z",
+    "accessionNo": "ACC-0002",
+    "copies": 1
+  },
+  {
+    "id": "e5e52d09-7159-411a-86dd-79db7e91a24a",
+    "title": "The Pragmatic Programmer",
+    "author": "David Thomas and Andrew Hunt",
+    "isbn": "978-0-13459-662-3",
+    "category": "Computer Science",
+    "status": "available",
+    "createdAt": "2026-10-08T17:42:11.127Z",
+    "accessionNo": "ACC-0003",
+    "copies": 1
+  },
+  {
+    "id": "cd9c3784-f086-4ee7-900f-93f507f6da5c",
+    "title": "Database System Concepts",
+    "author": "Abraham Silberschatz",
+    "isbn": "978-0-07802-215-9",
+    "category": "Information Technology",
+    "status": "available",
+    "createdAt": "2026-10-08T17:42:11.127Z",
+    "accessionNo": "ACC-0004",
+    "copies": 1
+  },
+  {
+    "id": "79da749b-8b1e-4930-85c0-b588f7ec2cd2",
+    "title": "Computer Networking",
+    "author": "James Kurose and Keith Ross",
+    "isbn": "978-0-13429-346-8",
+    "category": "Information Technology",
+    "status": "available",
+    "createdAt": "2026-10-08T17:42:11.127Z",
+    "accessionNo": "ACC-0005",
+    "copies": 1
+  },
+  {
+    "id": "6a6ee731-ece6-4213-b74f-565e71754eaa",
+    "accessionNo": "acc-0006",
+    "title": "mama ni rene",
+    "author": "rene clert",
+    "isbn": "1258796",
+    "category": "fantasy",
+    "copies": 5,
+    "status": "available",
+    "createdAt": "2026-10-10T07:48:13.507Z"
+  }
+]

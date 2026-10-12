@@ -1,0 +1,40 @@
+const express = require('express');
+const { v4: uuid } = require('uuid');
+const { readTable, writeTable } = require('../utils/db');
+const { fail, ok, required } = require('../utils/http');
+const { serializeCirculation } = require('../controllers');
+const router = express.Router();
+router.post('/borrow', serializeCirculation(async (req, res) => {
+  required(req.body, ['rfidUid', 'accessionNo']); const users = await readTable('tbl_user'); const books = await readTable('tbl_book');
+  const user = users.find(item => item.rfidUid && item.rfidUid === String(req.body.rfidUid).trim() && item.status === 'active' && ['student', 'faculty', 'staff'].includes(item.role));
+  const accessionNo = String(req.body.accessionNo).trim();
+  const index = books.findIndex(item => item.accessionNo && item.accessionNo.toLowerCase() === accessionNo.toLowerCase());
+  if (!user) fail(404, 'Active user RFID was not found.'); if (index < 0) fail(404, 'Book accession number was not found.');
+  if (books[index].status !== 'available') fail(409, 'This book is not available.');
+  const now = new Date(); const dueDate = new Date(now); dueDate.setDate(dueDate.getDate() + 7); books[index].status = 'borrowed';
+  const transaction = { id: uuid(), userId: user.id, userName: `${user.firstName} ${user.lastName}`.trim(), bookId: books[index].id, bookTitle: books[index].title, action: 'borrowed', dueDate: dueDate.toISOString(), timestamp: now.toISOString() };
+  const transactions = await readTable('tbl_transaction'); transactions.push(transaction);
+  await writeTable('tbl_book', books); await writeTable('tbl_transaction', transactions); ok(res, transaction, 'Book borrowed.', 201);
+}));
+router.post('/return', serializeCirculation(async (req, res) => {
+  required(req.body, ['rfidUid', 'accessionNo']); const books = await readTable('tbl_book');
+  const accessionNo = String(req.body.accessionNo).trim();
+  const index = books.findIndex(book => book.accessionNo && book.accessionNo.toLowerCase() === accessionNo.toLowerCase());
+  if (index < 0) fail(404, 'Book accession number was not found.'); if (books[index].status !== 'borrowed') fail(409, 'This book is not currently borrowed.');
+  const user = (await readTable('tbl_user')).find(item => item.rfidUid && item.rfidUid === String(req.body.rfidUid).trim() && item.status === 'active');
+  if (!user) fail(404, 'Active user RFID was not found.');
+  const transactions = await readTable('tbl_transaction');
+  const borrow = [...transactions].reverse().find(item => item.bookId === books[index].id && item.action === 'borrowed' && !transactions.some(later => later.bookId === item.bookId && later.action === 'returned' && Date.parse(later.timestamp) > Date.parse(item.timestamp)));
+  if (!borrow) fail(409, 'No active borrower was found for this book.');
+  if (borrow.userId !== user.id) fail(403, 'This book is checked out to a different user.');
+  books[index].status = 'available';
+  const transaction = { id: uuid(), userId: borrow.userId, userName: borrow.userName, bookId: books[index].id, bookTitle: books[index].title, action: 'returned', dueDate: borrow.dueDate, timestamp: new Date().toISOString() };
+  transactions.push(transaction); await writeTable('tbl_book', books); await writeTable('tbl_transaction', transactions); ok(res, transaction, 'Book returned.', 201);
+}));
+router.get('/', async (req, res) => {
+  let transactions = await readTable('tbl_transaction');
+  if (req.auth.role === 'student') transactions = transactions.filter(item => item.userId === req.auth.sub);
+  const limit = Math.min(Math.max(Number.parseInt(req.query.limit, 10) || 10, 1), 100);
+  transactions.sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp)); ok(res, transactions.slice(0, limit));
+});
+module.exports = router;

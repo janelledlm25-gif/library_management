@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up | CCC Library</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="portal.css" />
+</head>
+<body class="portal-auth-page">
+  <main class="portal-auth-card">
+    <img src="../logo.png" alt="Cainta Catholic College seal" />
+    <h1>Create your library account</h1>
+    <p class="muted">New accounts are reviewed by the library administrator.</p>
+    <form id="signupForm" class="portal-form" novalidate>
+      <div class="portal-form-grid">
+        <label>First Name<input name="firstName" required autocomplete="given-name" /><span id="firstNameError" class="field-error" aria-live="polite"></span></label>
+        <label>Last Name<input name="lastName" required autocomplete="family-name" /><span id="lastNameError" class="field-error" aria-live="polite"></span></label>
+        <label class="span-two">Email<input name="email" type="email" required autocomplete="email" /><span id="emailError" class="field-error" aria-live="polite"></span></label>
+        <label>Password<div class="pw-wrap"><input name="password" type="password" required autocomplete="new-password" aria-describedby="passwordError" /><button type="button" data-toggle-password aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div><span id="passwordError" class="field-error" aria-live="polite"></span></label>
+        <label>Confirm Password<div class="pw-wrap"><input name="confirmPassword" type="password" required autocomplete="new-password" aria-describedby="confirmPasswordError" /><button type="button" data-toggle-password aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div><span id="confirmPasswordError" class="field-error" aria-live="polite"></span></label>
+      </div>
+      <p id="signupMessage" class="portal-message" role="status" aria-live="polite"></p>
+      <button id="signupSubmitButton" class="btn-login" type="submit">Create Account</button>
+    </form>
+    <a class="portal-back-link" href="../index.html">Back to Login</a>
+  </main>
+  <script src="../js/api.js"></script>
+  <script>
+    const signupForm = document.getElementById('signupForm');
+    const signupButton = document.getElementById('signupSubmitButton');
+    const signupMessage = document.getElementById('signupMessage');
+    const fieldIds = ['firstName', 'lastName', 'email', 'password', 'confirmPassword'];
+    const signupError = (name, text = '') => { document.getElementById(`${name}Error`).textContent = text; };
+    document.querySelectorAll('[data-toggle-password]').forEach(toggle => toggle.addEventListener('click', () => {
+      const input = toggle.parentElement.querySelector('input'); const visible = input.type === 'password';
+      input.type = visible ? 'text' : 'password'; toggle.setAttribute('aria-pressed', String(visible)); toggle.setAttribute('aria-label', visible ? 'Hide password' : 'Show password');
+    }));
+    signupForm.addEventListener('submit', async event => {
+      event.preventDefault(); fieldIds.forEach(name => signupError(name)); signupMessage.textContent = ''; signupMessage.classList.remove('is-error');
+      const fields = Object.fromEntries(fieldIds.map(name => [name, signupForm.elements[name].value.trim()])); let valid = true;
+      for (const name of fieldIds) if (!fields[name]) { signupError(name, 'This field is required.'); valid = false; }
+      if (fields.email && !signupForm.elements.email.validity.valid) { signupError('email', 'Enter a valid email address.'); valid = false; }
+      if (fields.password && fields.password.length < 8) { signupError('password', 'Password must be at least 8 characters.'); valid = false; }
+      if (fields.password && fields.confirmPassword && fields.password !== fields.confirmPassword) { signupError('confirmPassword', 'Passwords do not match.'); valid = false; }
+      if (!valid) return;
+      signupButton.disabled = true; signupButton.textContent = 'Creating...';
+      try {
+        await api.post('/auth/register', { firstName: fields.firstName, lastName: fields.lastName, email: fields.email, password: fields.password });
+        signupForm.reset(); signupMessage.textContent = 'Account created! Please wait for admin approval.';
+        window.setTimeout(() => window.location.assign(new URL('../index.html', window.location.href).href), 2000);
+      } catch (error) {
+        console.error('Account registration failed:', error);
+        signupMessage.textContent = error instanceof TypeError ? 'Could not reach the server. Make sure the Express server is running on localhost:3000.' : (error.message || 'Could not create the account. Please try again.');
+        signupMessage.classList.add('is-error');
+      } finally { signupButton.disabled = false; signupButton.textContent = 'Create Account'; }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "3e814834-fb5b-479e-921c-a6332a38d6a6",
+    "firstName": "Admin",
+    "lastName": "CCC",
+    "email": "admin@ccc.edu.ph",
+    "passwordHash": "$2b$10$kN2afZVl2ZyhRlzQtoADp.A8mRELuV/RBerfdcC7xDSQRQx808XsC",
+    "course": "N/A",
+    "role": "admin",
+    "rfidUid": null,
+    "status": "active",
+    "createdAt": "2026-10-08T17:42:11.071Z",
+    "mustChangePassword": true
+  },
+  {
+    "id": "6d201486-a85e-4d85-bb69-b9ec189797a8",
+    "firstName": "Janelle",
+    "lastName": "Delima",
+    "email": "janelledlm25@gmail.com",
+    "passwordHash": "$2b$10$C/foDiXJqX60dQpkIpf.yufMQkLIwqqMUmIMvgCg1pdYiFprqzypu",
+    "course": "",
+    "role": "student",
+    "rfidUid": null,
+    "status": "pending",
+    "mustChangePassword": false,
+    "createdAt": "2026-10-08T19:42:06.695Z"
+  }
+]

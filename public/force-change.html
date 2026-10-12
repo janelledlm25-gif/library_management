@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Change Password | CCC Library</title><link rel="stylesheet" href="style.css" /><link rel="stylesheet" href="portal/portal.css" /></head>
+<body class="portal-auth-page">
+  <main class="portal-auth-card"><img src="logo.png" alt="Cainta Catholic College seal" /><h1>Change your password</h1><p class="muted">A new password is required before continuing.</p>
+    <form id="changePasswordForm" class="portal-form"><label>Current password<input name="currentPassword" type="password" autocomplete="current-password" required /></label><label>New password<input name="newPassword" type="password" minlength="8" autocomplete="new-password" required /></label><p id="changePasswordMessage" class="portal-message" role="status"></p><button class="portal-primary" type="submit">Update Password</button></form>
+    <a class="portal-back-link" href="index.html">Sign Out</a>
+  </main>
+  <script src="js/api.js"></script>
+  <script>
+    function pageUrl(publicPath) {
+      if (location.protocol !== 'file:') return `/${publicPath}`;
+      const currentPath = decodeURIComponent(location.pathname).replace(/\\/g, '/');
+      const publicMarker = currentPath.toLowerCase().lastIndexOf('/public/');
+      if (publicMarker >= 0) {
+        const currentPublicPath = currentPath.slice(publicMarker + 8);
+        const currentDirectory = currentPublicPath.includes('/') ? currentPublicPath.slice(0, currentPublicPath.lastIndexOf('/') + 1) : '';
+        const depth = currentDirectory.split('/').filter(Boolean).length;
+        return new URL(`${'../'.repeat(depth)}${publicPath}`, location.href).href;
+      }
+      return new URL(`public/${publicPath}`, location.href).href;
+    }
+    const form = document.getElementById('changePasswordForm'); const msg = document.getElementById('changePasswordMessage');
+    if (!api.getSession()) location.replace(pageUrl('index.html'));
+    form.addEventListener('submit', async event => { event.preventDefault(); const button = form.querySelector('button'); button.disabled = true; msg.textContent = '';
+      try { const result = await api.put('/auth/change-password', Object.fromEntries(new FormData(form))); api.saveSession(result); location.replace(pageUrl(result.user.role === 'admin' || result.user.role === 'librarian' ? 'admin/home.html' : 'portal/home.html')); }
+      catch (error) { msg.textContent = error.message; msg.classList.add('is-error'); button.disabled = false; }
+    });
+  </script>
+</body>
+</html>

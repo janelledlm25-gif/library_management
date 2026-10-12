@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCC Library Management System</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="admin-route">
+
+  <section id="loginPage" class="login">
+    <div class="login-left">
+      <img src="../library.jpg" alt="Library background" class="login-bg" />
+      <div class="login-left-overlay"></div>
+      <div class="login-left-content">
+        <img src="../logo.png" alt="CCC Logo" class="logo-lg" />
+        <h2 class="brand">Cainta Catholic College</h2>
+        <p>Library Management System</p>
+      </div>
+      <div class="fb"><span>f</span> Cainta Catholic College</div>
+    </div>
+
+    <div class="login-right">
+      <svg class="login-wave" viewBox="0 0 100 100" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="loginPanelGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#0A2463" />
+            <stop offset="1" stop-color="#0B2F7A" />
+          </linearGradient>
+        </defs>
+        <path d="M25 0 C17 12 9 27 8 40 C8 49 17 58 20 65 C23 77 14 91 12 100 L100 100 L100 0 Z" fill="url(#loginPanelGradient)" />
+      </svg>
+      <div class="gold-circle"></div>
+      <div class="login-top">
+        <img src="../logo.png" alt="CCC Logo" class="logo-md" />
+        <h1 class="brand-title">Library Management System</h1>
+      </div>
+
+      <form id="loginForm" class="login-card" autocomplete="on" novalidate>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="username" aria-describedby="emailError" aria-invalid="false" required />
+        <span id="emailError" class="field-error" aria-live="polite"></span>
+
+        <label for="password">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" name="password" autocomplete="current-password" aria-describedby="passwordError" aria-invalid="false" required />
+          <button type="button" id="togglePw" aria-label="Show password" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg>
+          </button>
+        </div>
+        <span id="passwordError" class="field-error" aria-live="polite"></span>
+        <a href="#" class="forgot">Forgot Password?</a>
+
+        <p id="loginError" class="error" role="status" aria-live="polite"></p>
+        <div class="login-actions">
+          <button type="submit" class="btn-login"><span class="btn-label">Log In</span><span class="btn-spinner" aria-hidden="true"></span></button>
+          <button type="button" id="signupButton" class="btn-login" data-signup-href="../portal/signup.html">Create an account</button>
+        </div>
+      </form>
+
+    </div>
+  </section>
+
+  <div id="app" class="app hidden">
+
+    <aside class="sidebar">
+      <div class="side-head">
+        <img src="../logo.png" alt="CCC Logo" class="logo-sm" />
+        <div>
+          <div class="brand-sm">Cainta Catholic College</div>
+          <div class="sub-sm">Library Administration</div>
+        </div>
+      </div>
+      <hr />
+
+      <nav>
+        <button class="nav-btn active" data-page="home"><span>🖥</span> Home</button>
+        <button class="nav-btn" data-page="users"><span>👤</span> User Accounts</button>
+        <button class="nav-btn" data-page="reports"><span>📊</span> Reports</button>
+        <button class="nav-btn" data-page="books"><span>📚</span> Book Registration</button>
+        <button class="nav-btn" data-page="history"><span>🕘</span> Log History</button>
+      </nav>
+
+      <div class="side-foot">
+        <div class="profile-menu-wrap">
+          <div id="profileDropdown" class="profile-dropdown" role="menu" hidden><button id="profileViewButton" class="profile-dropdown-item" type="button" role="menuitem"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.5-4.2 3.2-6.5 8-6.5s7.5 2.3 8 6.5"/></svg>View Profile</button></div>
+          <button id="profileMenuButton" class="profile profile-trigger" type="button" aria-haspopup="menu" aria-expanded="false"><span id="sidebarProfileAvatar" class="avatar">M</span><span>Profile</span></button>
+        </div>
+        <button id="logoutBtn" class="nav-btn logout">Log Out</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="gold-circle top"></div>
+
+      <section id="page-home" class="page active">
+        <h1 class="page-title">Home</h1>
+        <p class="dashboard-datetime"><span id="datetime"></span></p>
+        <div class="cards">
+          <div class="card clickable" data-goto="history">
+            <p class="card-label">Student Entered Today</p>
+            <h2 class="big">120</h2>
+            <p class="card-note green">12% from yesterday</p>
+          </div>
+          <div class="card clickable" data-goto="reports">
+            <p class="card-label">Borrowed Books</p>
+            <h2 class="big" id="borrowedBooksCount">0</h2>
+            <p class="card-note green">+30 this week</p>
+          </div>
+          <div class="card">
+            <p class="card-label">Overdue Books</p>
+            <h2 class="big">70</h2>
+            <p class="card-note red">Needs Attention</p>
+          </div>
+          <div class="card clickable" data-goto="reports">
+            <p class="card-label">Returned Books</p>
+            <h2 class="big" id="returnedBooksCount">0</h2>
+            <p class="card-note green">Recently checked-in items</p>
+          </div>
+          <div class="card wide">
+            <p class="card-title">Recent borrowing activity</p>
+            <p class="muted small">Latest transactions at the circulation desk</p>
+            <p class="bold small" id="homeRecentUser"></p>
+            <p class="muted small" id="homeRecentAction"></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-users" class="page">
+        <div class="title-row"><h1 class="page-title">User Accounts</h1></div>
+        <div class="panel">
+          <div class="admin-filters"><input id="userSearch" type="search" placeholder="Search name or email" aria-label="Search accounts" /><select id="userRoleFilter"><option value="">All roles</option><option value="student">Student</option><option value="faculty">Faculty</option><option value="staff">Staff</option></select><select id="userStatusFilter"><option value="">All statuses</option><option>pending</option><option>active</option><option>inactive</option><option>rejected</option></select></div>
+          <table>
+            <thead>
+              <tr><th>Name</th><th>Email</th><th>Course / Dept.</th><th>Role</th><th>Status</th><th>RFID</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="page-reports" class="page">
+        <h1 class="page-title">Reports</h1>
+        <div class="panel">
+          <p class="card-title">Recent Activity</p>
+          <p class="muted small">Latest Transactions.</p>
+          <div id="reportsActivityList"></div>
+        </div>
+      </section>
+
+      <section id="page-books" class="page">
+        <div class="title-row">
+          <h1 class="page-title">Book Registration</h1>
+          <button id="registerBookBtn" class="btn-register">＋ Register a book</button>
+        </div>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr><th>Accession No.</th><th>Title</th><th>Author</th><th>ISBN</th><th>Category</th><th>Copies</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="booksBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="page-history" class="page">
+        <h1 class="page-title">History</h1>
+        <div class="history-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="userViewModal" class="user-view-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="viewUserName">
+    <section class="user-view-card" tabindex="-1">
+      <button id="userViewCloseX" class="user-view-close" type="button" aria-label="Close">×</button>
+      <header class="user-view-header">
+        <span id="viewUserAvatar" class="user-view-avatar" aria-hidden="true">U</span>
+        <div class="user-view-identity"><h2 id="viewUserName"></h2><div class="user-view-badges"><span id="viewUserRole" class="profile-role-badge"></span></div></div>
+      </header>
+      <div class="user-view-information">
+        <h3 class="user-view-section-title">Account Information</h3>
+        <dl class="user-view-details">
+        <div><dt>Full Name</dt><dd id="viewUserFullName"></dd></div>
+        <div><dt>Email</dt><dd id="viewUserEmail"></dd></div>
+        <div><dt>Course / Dept.</dt><dd id="viewUserCourse"></dd></div>
+        <div><dt>Role</dt><dd id="viewUserRoleValue"></dd></div>
+        <div><dt>Status</dt><dd id="viewUserStatusValue"></dd></div>
+        <div><dt>RFID</dt><dd id="viewUserRfid"></dd></div>
+        <div><dt>Date Registered</dt><dd id="viewUserDateRegistered"></dd></div>
+        </dl>
+      </div>
+      <footer class="user-view-actions"><button id="userViewClose" class="user-view-primary" type="button">Close</button><button id="userViewApprove" class="user-view-approve hidden" type="button">Add</button><button id="userViewReject" class="user-view-reject hidden" type="button">Reject</button></footer>
+    </section>
+  </div>
+
+  <div id="userToast" class="user-toast hidden" role="status" aria-live="polite"></div>
+
+  <div id="profileModal" class="profile-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="profileModalName">
+    <section class="profile-modal-card">
+      <button id="profileModalClose" class="profile-modal-close" type="button" aria-label="Close">×</button>
+      <header class="profile-modal-header"><span id="profileModalAvatar" class="profile-modal-avatar">A</span><div class="profile-modal-identity"><h2 id="profileModalName">Profile</h2><span id="profileModalRole" class="profile-role-badge">Admin</span></div></header>
+      <form id="profileModalForm" novalidate>
+        <div id="profileModalBody" class="profile-modal-body">
+          <h3 class="profile-section-title">Account Information</h3>
+          <div id="profileViewGrid" class="profile-tiles">
+            <div class="profile-info-tile profile-tile-full"><span>Email</span><strong id="profileViewEmail">—</strong></div>
+            <div class="profile-info-tile"><span>Role</span><strong id="profileViewRole">—</strong></div>
+            <div class="profile-info-tile"><span>Sex</span><strong id="profileViewSex">—</strong></div>
+            <div id="profileViewStudentNoTile" class="profile-info-tile"><span>Student No.</span><strong id="profileViewStudentNo">—</strong></div>
+            <div id="profileViewProgramTile" class="profile-info-tile"><span>Program</span><strong id="profileViewProgram">—</strong></div>
+            <div id="profileViewEmployeeIdTile" class="profile-info-tile" hidden><span>Employee ID</span><strong id="profileViewEmployeeId">—</strong></div>
+            <div id="profileViewDepartmentTile" class="profile-info-tile" hidden><span>Department</span><strong id="profileViewDepartment">—</strong></div>
+          </div>
+          <div id="profileEditGrid" class="profile-tiles" hidden>
+            <label class="profile-input-tile"><span>First Name</span><input id="profileFirstName" autocomplete="given-name" disabled required /><span id="profileFirstNameError" class="profile-field-error"></span></label>
+            <label class="profile-input-tile"><span>Last Name</span><input id="profileLastName" autocomplete="family-name" disabled required /><span id="profileLastNameError" class="profile-field-error"></span></label>
+            <label class="profile-input-tile profile-tile-full"><span>Email</span><input id="profileEmail" type="email" autocomplete="email" disabled required /><span id="profileEmailError" class="profile-field-error"></span></label>
+            <label class="profile-input-tile"><span>Role</span><input id="profileRole" disabled readonly /></label>
+            <label class="profile-input-tile"><span>Sex</span><select id="profileSex" disabled><option value="">—</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select></label>
+            <label id="profileStudentNoTile" class="profile-input-tile"><span>Student No.</span><input id="profileStudentNo" disabled readonly /></label>
+            <label id="profileEmployeeIdTile" class="profile-input-tile" hidden><span>Employee ID</span><input id="profileEmployeeId" disabled readonly /></label>
+            <label id="profileCourseTile" class="profile-input-tile"><span id="profileCourseLabel">Department</span><input id="profileCourse" disabled /><span id="profileCourseError" class="profile-field-error"></span></label>
+          </div>
+        <details id="profilePasswordSection" class="profile-password-section" hidden>
+          <summary>Change Password</summary>
+          <div class="profile-password-fields">
+            <label class="profile-field profile-field-full">Current Password<div class="profile-password-wrap"><input id="profileCurrentPassword" type="password" autocomplete="current-password" disabled /><button class="profile-eye-toggle" type="button" aria-label="Show current password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div><span id="profileCurrentPasswordError" class="profile-field-error"></span></label>
+            <label class="profile-field">New Password<div class="profile-password-wrap"><input id="profileNewPassword" type="password" autocomplete="new-password" disabled /><button class="profile-eye-toggle" type="button" aria-label="Show new password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div><span id="profileNewPasswordError" class="profile-field-error"></span></label>
+            <label class="profile-field">Confirm New Password<div class="profile-password-wrap"><input id="profileConfirmPassword" type="password" autocomplete="new-password" disabled /><button class="profile-eye-toggle" type="button" aria-label="Show confirm password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div><span id="profileConfirmPasswordError" class="profile-field-error"></span></label>
+          </div>
+        </details>
+        <p id="profileModalMessage" class="profile-modal-message" role="status" aria-live="polite"></p>
+        <div class="profile-modal-actions"><button id="profileViewCloseButton" class="profile-action-secondary" type="button">Close</button><button id="profileEditButton" class="profile-action-primary" type="button">Edit Account</button><button id="profileCancelButton" class="profile-action-secondary" type="button" hidden>Cancel</button><button id="profileSaveButton" class="profile-action-primary" type="submit" hidden>Save Changes</button></div>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div id="bookModal" class="modal hidden">
+    <div class="modal-box small-box">
+      <form id="bookForm" class="stack-form">
+        <label>Accession Number:</label><input id="bAccession" required />
+        <label>Book Title:</label><input id="bTitle" required />
+        <label>Author:</label><input id="bAuthor" required />
+        <label>ISBN:</label><input id="bIsbn" required />
+        <label>Category:</label><input id="bCategory" required />
+        <label>Copies:</label><input id="bQty" type="number" min="1" class="short" required />
+        <label>Status:</label><select id="bStatus"><option value="available">Available</option><option value="lost">Lost</option><option value="damaged">Damaged</option></select>
+        <div class="center"><button type="submit" class="btn-save">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../script.js"></script>
+</body>
+</html>

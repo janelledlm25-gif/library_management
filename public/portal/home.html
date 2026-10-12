@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Library Portal | Cainta Catholic College</title>
+  <link rel="stylesheet" href="../style.css" /><link rel="stylesheet" href="portal.css" />
+</head>
+<body class="portal-page">
+  <aside class="portal-sidebar">
+    <div class="portal-brand"><img src="../logo.png" alt="" /><div><strong>Cainta Catholic College</strong><small>Library Portal</small></div></div>
+    <nav aria-label="Portal navigation">
+      <button class="portal-nav active" data-page="home">Home</button><button class="portal-nav" data-page="books">Book Catalog</button>
+      <button class="portal-nav" data-page="my-books">My Books</button><button class="portal-nav" data-page="history">My History</button>
+    </nav>
+    <div class="portal-sidebar-footer">
+      <div class="profile-menu-wrap">
+        <div id="profileDropdown" class="profile-dropdown" role="menu" hidden><button id="profileViewButton" class="profile-dropdown-item" type="button" role="menuitem"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.5-4.2 3.2-6.5 8-6.5s7.5 2.3 8 6.5"/></svg>View Profile</button></div>
+        <button id="profileMenuButton" class="profile profile-trigger" type="button" aria-haspopup="menu" aria-expanded="false"><span id="sidebarProfileAvatar" class="avatar">M</span><span>Profile</span></button>
+      </div>
+      <button id="portalLogout" class="portal-logout">Log Out</button>
+    </div>
+  </aside>
+  <main class="portal-main">
+    <header class="portal-topbar"><div><p class="portal-kicker">CAINTA CATHOLIC COLLEGE</p><h1 id="portalPageTitle">Home</h1></div><p id="portalWelcome" class="portal-welcome"></p></header>
+    <section class="portal-view active" id="portal-home">
+      <div class="portal-stat-grid"><article class="portal-stat"><span>Currently Borrowed</span><strong id="borrowedCount">0</strong></article><article class="portal-stat"><span>Due Soon</span><strong id="dueSoonCount">0</strong></article><article class="portal-stat"><span>Overdue</span><strong id="overdueCount">0</strong></article></div>
+      <article class="portal-panel"><h2>Overdue alerts</h2><div id="overdueList" class="portal-list"><p class="portal-muted">No overdue books.</p></div></article>
+    </section>
+    <section class="portal-view" id="portal-books">
+      <article class="portal-panel"><div class="portal-toolbar"><div><h2>Book Catalog</h2><p>Browse the library collection. Borrowing is handled at the library counter.</p></div><div class="portal-search"><input id="catalogSearch" type="search" placeholder="Title, author, ISBN, accession no." /><select id="catalogCategory"><option value="">All categories</option></select></div></div><div id="catalogResults" class="portal-book-grid"></div></article>
+    </section>
+    <section class="portal-view" id="portal-my-books"><article class="portal-panel"><h2>My Books</h2><div id="myBooksList" class="portal-list"></div></article></section>
+    <section class="portal-view" id="portal-history"><article class="portal-panel"><h2>My History</h2><div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Book</th><th>Action</th><th>Date &amp; time</th><th>Due date</th></tr></thead><tbody id="historyRows"></tbody></table></div></article></section>
+    <section class="portal-view" id="portal-profile"><div class="portal-profile-grid"><article class="portal-panel"><h2>Profile</h2><form id="profileForm" class="portal-form"><label>First Name<input name="firstName" required /></label><label>Last Name<input name="lastName" required /></label><label>Email<input name="email" type="email" required /></label><label>Course / Department<input name="course" required /></label><label>RFID card<input id="profileRfid" readonly /></label><p id="profileMessage" class="portal-message" role="status"></p><button class="portal-primary" type="submit">Save Profile</button></form></article><article class="portal-panel"><h2>Change Password</h2><form id="portalPasswordForm" class="portal-form"><label>Current password<input name="currentPassword" type="password" required autocomplete="current-password" /></label><label>New password<input name="newPassword" type="password" minlength="8" required autocomplete="new-password" /></label><p id="passwordMessage" class="portal-message" role="status"></p><button class="portal-primary" type="submit">Change Password</button></form></article></div></section>
+  </main>
+  <div id="profileModal" class="profile-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="profileModalName">
+    <section class="profile-modal-card">
+      <button id="profileModalClose" class="profile-modal-close" type="button" aria-label="Close">×</button>
+      <header class="profile-modal-header"><span id="profileModalAvatar" class="profile-modal-avatar">S</span><div class="profile-modal-identity"><h2 id="profileModalName">Profile</h2><span id="profileModalRole" class="profile-role-badge">Student</span></div></header>
+      <form id="profileModalForm" novalidate>
+        <div id="profileModalBody" class="profile-modal-body">
+          <h3 class="profile-section-title">Account Information</h3>
+          <div id="profileViewGrid" class="profile-tiles">
+            <div class="profile-info-tile profile-tile-full"><span>Email</span><strong id="profileViewEmail">—</strong></div>
+            <div class="profile-info-tile"><span>Role</span><strong id="profileViewRole">—</strong></div>
+            <div class="profile-info-tile"><span>Sex</span><strong id="profileViewSex">—</strong></div>
+            <div id="profileViewStudentNoTile" class="profile-info-tile"><span>Student No.</span><strong id="profileViewStudentNo">—</strong></div>
+            <div id="profileViewProgramTile" class="profile-info-tile"><span>Program</span><strong id="profileViewProgram">—</strong></div>
+            <div id="profileViewEmployeeIdTile" class="profile-info-tile" hidden><span>Employee ID</span><strong id="profileViewEmployeeId">—</strong></div>
+            <div id="profileViewDepartmentTile" class="profile-info-tile" hidden><span>Department</span><strong id="profileViewDepartment">—</strong></div>
+          </div>
+          <div id="profileEditGrid" class="profile-tiles" hidden>
+            <label class="profile-input-tile"><span>First Name</span><input id="profileFirstName" autocomplete="given-name" disabled required /><span id="profileFirstNameError" class="profile-field-error"></span></label>
+            <label class="profile-input-tile"><span>Last Name</span><input id="profileLastName" autocomplete="family-name" disabled required /><span id="profileLastNameError" class="profile-field-error"></span></label>
+            <label class="profile-input-tile profile-tile-full"><span>Email</span><input id="profileEmail" type="email" autocomplete="email" disabled required /><span id="profileEmailError" class="profile-field-error"></span></label>
+            <label class="profile-input-tile"><span>Role</span><input id="profileRole" disabled readonly /></label>
+            <label class="profile-input-tile"><span>Sex</span><select id="profileSex" disabled><option value="">—</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select></label>
+            <label id="profileStudentNoTile" class="profile-input-tile"><span>Student No.</span><input id="profileStudentNo" disabled readonly /></label>
+            <label id="profileEmployeeIdTile" class="profile-input-tile" hidden><span>Employee ID</span><input id="profileEmployeeId" disabled readonly /></label>
+            <label id="profileCourseTile" class="profile-input-tile"><span id="profileCourseLabel">Program</span><input id="profileCourse" disabled /><span id="profileCourseError" class="profile-field-error"></span></label>
+          </div>
+        <details id="profilePasswordSection" class="profile-password-section" hidden>
+          <summary>Change Password</summary>
+          <div class="profile-password-fields">
+            <label class="profile-field profile-field-full">Current Password<div class="profile-password-wrap"><input id="profileCurrentPassword" type="password" autocomplete="current-password" disabled /><button class="profile-eye-toggle" type="button" aria-label="Show current password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div><span id="profileCurrentPasswordError" class="profile-field-error"></span></label>
+            <label class="profile-field">New Password<div class="profile-password-wrap"><input id="profileNewPassword" type="password" autocomplete="new-password" disabled /><button class="profile-eye-toggle" type="button" aria-label="Show new password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div><span id="profileNewPasswordError" class="profile-field-error"></span></label>
+            <label class="profile-field">Confirm New Password<div class="profile-password-wrap"><input id="profileConfirmPassword" type="password" autocomplete="new-password" disabled /><button class="profile-eye-toggle" type="button" aria-label="Show confirm password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div><span id="profileConfirmPasswordError" class="profile-field-error"></span></label>
+          </div>
+        </details>
+        <p id="profileModalMessage" class="profile-modal-message" role="status" aria-live="polite"></p>
+        <div class="profile-modal-actions"><button id="profileViewCloseButton" class="profile-action-secondary" type="button">Close</button><button id="profileEditButton" class="profile-action-primary" type="button">Edit Account</button><button id="profileCancelButton" class="profile-action-secondary" type="button" hidden>Cancel</button><button id="profileSaveButton" class="profile-action-primary" type="submit" hidden>Save Changes</button></div>
+        </div>
+      </form>
+    </section>
+  </div>
+  <div id="portalProfileToast" class="portal-profile-toast" role="status" aria-live="polite" hidden></div>
+  <script src="../js/api.js"></script><script src="js/portal.js"></script>
+</body>
+</html>
